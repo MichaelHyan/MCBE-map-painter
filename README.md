@@ -17,7 +17,7 @@
 
 PC版存储位置
 ```
-%USERPROFILE%\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftWorlds\behavior_packs\地图画生成器辅助资源
+%USERPROFILE%\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\behavior_packs\地图画生成器辅助资源
 ```
 6.运行start.bat或map_painter.py，如系统阻止运行则继续选择运行
 
