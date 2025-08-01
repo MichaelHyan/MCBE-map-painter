@@ -1,0 +1,40 @@
+{
+  "format_version": 1,
+  "header": {
+    "description": "作者:韩言悦欣",
+    "name": "地图画生成器辅助资源包",
+    "uuid": "cf63ec98-758a-4785-a496-42014ecd4878",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      8,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "description": "作者:韩言悦欣",
+      "type": "data",
+      "uuid": "eac92185-cfe6-4a3e-916c-6537f5e74b00",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "65c0f514-1717-422d-bc64-e43b6115e3e8",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}
