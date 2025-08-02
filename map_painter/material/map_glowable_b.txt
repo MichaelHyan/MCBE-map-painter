@@ -1,0 +1,7 @@
+glowstone
+sea_lantern
+beacon
+pearlescent_froglight
+verdant_froglight
+ochre_froglight
+shroomlight

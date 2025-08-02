@@ -1,0 +1,4 @@
+bedrock
+dirt
+mossy_stone
+coal_block

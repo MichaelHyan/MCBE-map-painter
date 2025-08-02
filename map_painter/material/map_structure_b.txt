@@ -1,0 +1,8 @@
+iron_block
+gold_block
+emerald_block
+diamond_block
+lapis_block
+raw_copper_block
+raw_iron_block
+raw_gold_block

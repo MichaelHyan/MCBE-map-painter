@@ -1,0 +1,5 @@
+nether_brick
+red_nether_brick
+chiseled_nether_bricks
+cracked_nether_bricks
+netherite_block

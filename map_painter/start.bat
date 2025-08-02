@@ -1,1 +1,1 @@
-python map_painter.py
+python map_painter_plus.py

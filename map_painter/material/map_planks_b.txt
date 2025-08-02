@@ -1,0 +1,12 @@
+oak_planks
+spruce_planks
+birch_planks
+jungle_planks
+acacia_planks
+dark_oak_planks
+mangrove_planks
+cherry_planks
+pale_oak_planks
+bamboo_planks
+crimson_planks
+warped_planks
