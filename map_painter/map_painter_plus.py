@@ -77,5 +77,17 @@ def main():
             f.write('\n'.join(r[i:i+9000]))
         j += 1
     print(f'生成完毕  共{j}个文件')
+    print('是否生成预览图，y/n')
+    if input() == 'y':
+        pix = []
+        for x,y,l in result:
+            pix.append((x,y,(c_list[l][0],c_list[l][1],c_list[l][2])))
+        width = max(x for x, y, rgb in pix) + 1
+        height = max(y for x, y, rgb in pix) + 1
+        image = Image.new("RGB", (width, height))
+        for x, y, rgb in pix:
+            image.putpixel((x, y), rgb)
+        image.save("output_image.png")
+
 if __name__ == "__main__":
     main()
