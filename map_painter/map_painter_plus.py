@@ -1,6 +1,6 @@
 from PIL import Image
-material = ['glass','concrete','wool','planks','nether','sea','structure','terracotta','glazed_terracotta','glowable','special']
-name = ['玻璃','混凝土','羊毛','木板','下界方块','海洋神殿方块','建筑方块','陶瓦','带釉陶瓦','发光方块','不可名状方块']
+material = ['glass','concrete','wool','planks','nether','sea','structure','terracotta','glazed_terracotta','glowable','special','fallable']
+name = ['玻璃','混凝土','羊毛','木板','下界方块','海洋神殿方块','建筑方块','陶瓦','带釉陶瓦','发光方块','不可名状方块','可下落方块(不建议使用)']
 m_list = []
 c_list = []
 weight = True
@@ -45,7 +45,7 @@ def convert_a(x,y,l,block):
 def convert_b(x,y,z,block):
     return f'setblock ~{x} ~{z-1} ~{y} {block}'
 
-def tower(x,y,l):
+def tower0(x,y,l):
     t1 =[]
     t2 = [[[0,0]]]
     for i in range(l):
@@ -62,8 +62,44 @@ def tower(x,y,l):
             j[1] += y
     return t2
 
+def tower1(x0,y0):
+    t1 = []
+    for i in range(x0+1):
+        if i%2 == 0:
+            for j in range(y0):
+                t1.append([[i,j]])
+        else:
+            for j in range(y0-1,-1,-1):
+                t1.append([[i,j]])
+    return t1
+
+def tower2(x0,y0,l):
+    x0 = round(x0/2)-1
+    y0 = round(y0/2)-1
+    t1 = [[[0,0]]]
+    for i in range(l*2):
+        for j in range((i+1)*2):
+            t1.append([[i+1,j-i]])
+        for j in range((i+1)*2):
+            t1.append([[i-j,i+1]])
+        for j in range((i+1)*2):
+            t1.append([[-i-1,i-j]])
+        for j in range((i+1)*2):
+            t1.append([[j-i,-i-1]])
+    for i in t1:
+        i[0][0] += x0
+        i[0][1] += y0
+    return t1
+
+
+def position_l(x0,l):
+    return l//x0,l%x0
+
 def position(x,y,x0):
     return x + y * x0
+
+def rev(l0):
+    return [l0[i] for i in range(len(l0)-1,-1,-1)]
 
 def main_a():
     global m_list,c_list,weight
@@ -142,23 +178,85 @@ def main_b():
         pass
     x0,y0 = size
     print(f'图片尺寸：{x0}*{y0}')
-    print('输入起始点位置')
-    x1,y1 = map(int,input().split())
-    l = max(x0,y0)
-    t = tower(x1,y1,l*2)
-    r = [f'setblock ~{x1} ~-2 ~{y1} torch',f'setblock ~{x1} ~-1 ~{y1} sand']
-    for i in range(len(t)-1):#level
-        for j in range(len(t[i])):
-            if t[i][j][0] >= -1*x1 and t[i][j][1] >= -1*y1 and t[i][j][0] < (x0-x1) and t[i][j][1] < (y0-y1):
+    print('输入沙画类型 注意图片尺寸')
+    print('1 中心扩散 任意矩形 预留高度=长边/√2')
+    print('2 S型扫描  任意矩形 预留高度=长边*短边')
+    print('3 螺旋向外 正方形 预留高度=边长**2')
+    print('4 螺旋向内 正方形 预留高度=边长**2 测试中请勿使用')
+    epyt = input()
+    if epyt == '1':
+        print('输入起始点位置')
+        x1,y1 = map(int,input().split())
+        l = max(x0,y0)
+        t = tower0(x1,y1,l*2)
+        r = [f'setblock ~{x1} ~-2 ~{y1} torch',f'setblock ~{x1} ~-1 ~{y1} sand']
+        for i in range(len(t)-1):#level
+            for j in range(len(t[i])):
+                if t[i][j][0] >= -1*x1 and t[i][j][1] >= -1*y1 and t[i][j][0] < (x0-x1) and t[i][j][1] < (y0-y1):
+                    block = m_list[0][result[position(t[i][j][0]+x1,t[i][j][1]+y1,x0)][2]]
+                    r.append(convert_b(t[i][j][0],t[i][j][1],i,block))
+            for j in range(len(t[i+1])):
+                if t[i+1][j][0] >= -1*x1 and t[i+1][j][1] >= -1*y1 and t[i+1][j][0] < (x0-x1) and t[i+1][j][1] < (y0-y1):
+                    r.append(convert_b(t[i+1][j][0],t[i+1][j][1],i,'torch'))
+        for j in range(len(t[-1])):#final
+            if t[-1][j][0] >= -1*x1 and t[-1][j][1] >= -1*y1 and t[-1][j][0] < (x0-x1) and t[-1][j][1] < (y0-y1):
                 block = m_list[0][result[position(t[i][j][0]+x1,t[i][j][1]+y1,x0)][2]]
                 r.append(convert_b(t[i][j][0],t[i][j][1],i,block))
-        for j in range(len(t[i+1])):
-            if t[i+1][j][0] >= -1*x1 and t[i+1][j][1] >= -1*y1 and t[i+1][j][0] < (x0-x1) and t[i+1][j][1] < (y0-y1):
-                r.append(convert_b(t[i+1][j][0],t[i+1][j][1],i,'torch'))
-    for j in range(len(t[-1])):#final
-        if t[-1][j][0] >= -1*x1 and t[-1][j][1] >= -1*y1 and t[-1][j][0] < (x0-x1) and t[-1][j][1] < (y0-y1):
-            block = m_list[0][result[position(t[i][j][0]+x1,t[i][j][1]+y1,x0)][2]]
-            r.append(convert_b(t[i][j][0],t[i][j][1],i,block))
+    elif epyt in ['2','3','4']:
+        if epyt == '2':
+            t = tower1(x0,y0)
+            r = [f'setblock ~0 ~-2 ~0 torch',f'setblock ~0 ~-1 ~0 sand']
+        elif epyt == '3':
+            if x0 != y0:
+                print('目标尺寸不支持')
+                return
+            t = tower2(x0,y0,x0)
+            x1 = round(x0/2)-1
+            y1 = round(y0/2)-1
+            r = [f'setblock ~{x1} ~-2 ~{y1} torch',f'setblock ~{x1} ~-1 ~{y1} sand']
+        elif epyt == '4':
+            if x0 != y0:
+                print('目标尺寸不支持')
+                return
+            t = tower2(x0,y0,x0)
+            t = rev(t)
+            x1 = t[0][0][0]
+            y1 = t[0][0][1]
+            r = []
+        lv = 0
+        m = 0
+        if epyt == '3':
+            for i in range(len(t)-1):
+                for j in range(len(t[i])):
+                    if t[i][j][0] >= 0 and t[i][j][1] >= 0 and t[i][j][0] < x0 and t[i][j][1] < y0:
+                        block = m_list[0][result[position(t[i][j][0],t[i][j][1],x0)][2]]
+                        r.append(convert_b(t[i][j][0],t[i][j][1],lv,block))
+                        m = 1
+                for j in range(len(t[i+1])):
+                    if t[i+1][j][0] >= 0 and t[i+1][j][1] >= 0 and t[i+1][j][0] < x0 and t[i+1][j][1] < y0:
+                        r.append(convert_b(t[i+1][j][0],t[i+1][j][1],lv,'torch'))
+                if m == 1:
+                    lv += 1
+                    m = 0
+            for j in range(len(t[-1])):
+                if t[i][j][0] >= 0 and t[i][j][1] >= 0 and t[i][j][0] < x0 and t[i][j][1] < y0:
+                    block = m_list[0][result[position(t[i][j][0],t[i][j][1],x0)][2]]
+                    r.append(convert_b(t[i][j][0],t[i][j][1],i,block))
+        elif epyt == '4':
+            lv -= 1
+            for i in range(len(t)-1):
+                for j in range(len(t[i])):
+                    if t[i][j][0] >= 0 and t[i][j][1] >= 0 and t[i][j][0] < x0 and t[i][j][1] < y0:
+                        block = m_list[0][result[position(t[i][j][0],t[i][j][1],x0)][2]]
+                        r.append(convert_b(t[i][j][0],t[i][j][1],lv,block))
+                        m = 1
+                for j in range(len(t[i+1])):
+                    if t[i+1][j][0] >= 0 and t[i+1][j][1] >= 0 and t[i+1][j][0] < x0 and t[i+1][j][1] < y0:
+                        r.append(convert_b(t[i+1][j][0],t[i+1][j][1],lv,'torch'))
+                if m == 1:
+                    lv += 1
+                    m = 0
+            r.append(convert_b(t[-1][0][0],t[-1][0][1],lv,block))
     j = 0
     for i in range(0,len(r),9000):
         with open(f'.\\functions\\new{j}.mcfunction', 'w') as f:
@@ -177,7 +275,7 @@ def main_b():
             image.putpixel((x, y), rgb)
         image.save("output_image.png")
 
-if __name__ == "__main__":
+def main():
     print('1 地图画模式')
     print('2 沙画模式')
     a = input()
@@ -185,3 +283,6 @@ if __name__ == "__main__":
         main_a()
     elif a == '2':
         main_b()
+
+if __name__ == '__main__':
+    main()
