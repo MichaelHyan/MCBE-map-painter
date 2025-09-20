@@ -182,10 +182,10 @@ def main_b():
     print('1 中心扩散 任意矩形 预留高度=长边/√2')
     print('2 S型扫描  任意矩形 预留高度=长边*短边')
     print('3 螺旋向外 正方形 预留高度=边长**2')
-    print('4 螺旋向内 正方形 预留高度=边长**2 测试中请勿使用')
+    print('4 螺旋向内 正方形 预留高度=边长**2')
     epyt = input()
     if epyt == '1':
-        print('输入起始点位置')
+        print('输入起始点位置(如0 0)')
         x1,y1 = map(int,input().split())
         l = max(x0,y0)
         t = tower0(x1,y1,l*2)
@@ -225,7 +225,7 @@ def main_b():
             r = []
         lv = 0
         m = 0
-        if epyt == '3':
+        if epyt in ['2','3']:
             for i in range(len(t)-1):
                 for j in range(len(t[i])):
                     if t[i][j][0] >= 0 and t[i][j][1] >= 0 and t[i][j][0] < x0 and t[i][j][1] < y0:
