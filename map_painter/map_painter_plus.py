@@ -2,8 +2,8 @@ from PIL import Image
 import time
 material = ['glass','concrete','wool','planks','nether','sea','structure','terracotta','glazed_terracotta','glowable','special','fallable']
 name = ['玻璃','混凝土','羊毛','木板','下界方块','海洋神殿方块','建筑方块','陶瓦','带釉陶瓦','发光方块','不可名状方块','可下落方块(不建议使用)']
-materialf = ['flower','flowertall']
-namef = ['一格高花','两格高花']
+materialf = ['air','flower','flowertall']
+namef = ['空气','一格高花','两格高花']
 m_list = []
 c_list = []
 weight = True
