@@ -1,6 +1,9 @@
 from PIL import Image
+import time
 material = ['glass','concrete','wool','planks','nether','sea','structure','terracotta','glazed_terracotta','glowable','special','fallable']
 name = ['玻璃','混凝土','羊毛','木板','下界方块','海洋神殿方块','建筑方块','陶瓦','带釉陶瓦','发光方块','不可名状方块','可下落方块(不建议使用)']
+materialf = ['flower','flowertall']
+namef = ['一格高花','两格高花']
 m_list = []
 c_list = []
 weight = True
@@ -44,6 +47,9 @@ def convert_a(x,y,l,block):
 
 def convert_b(x,y,z,block):
     return f'setblock ~{x} ~{z-1} ~{y} {block}'
+
+def convert_c(x,y,l,block):
+    return f'setblock ~{x} ~ ~{y} {block[l]}'
 
 def tower0(x,y,l):
     t1 =[]
@@ -153,6 +159,7 @@ def main_a():
         for x, y, rgb in pix:
             image.putpixel((x, y), rgb)
         image.save("output_image.png")
+    time.sleep(2)
 
 def main_b():
     global m_list,c_list,weight
@@ -259,7 +266,7 @@ def main_b():
             r.append(convert_b(t[-1][0][0],t[-1][0][1],lv,block))
     j = 0
     for i in range(0,len(r),9000):
-        with open(f'.\\functions\\new{j}.mcfunction', 'w') as f:
+        with open(f'.\\functions\\snew{j}.mcfunction', 'w') as f:
             f.write('\n'.join(r[i:i+9000]))
         j += 1
     print(f'生成完毕  共{j}个文件')
@@ -274,15 +281,62 @@ def main_b():
         for x, y, rgb in pix:
             image.putpixel((x, y), rgb)
         image.save("output_image.png")
+    time.sleep(2)
+
+def main_c():
+    global m_list,c_list,weight
+    print('将图片拖至此处')
+    path = input()
+    try:
+        size = Image.open(path).convert("RGB").size
+    except Exception as e:
+        pass
+    x0,y0 = size
+    print(f'图片尺寸：{x0}*{y0}')
+    print('选取材料类型，序号使用空格分开')
+    for i in range(len(materialf)):
+        print(f'{i} {namef[i]} {materialf[i]}')
+    b_list = list(map(int,input().split()))
+    print('是否使用视觉增强算法，y/n')
+    if input() == 'y':
+        weight = True
+    else:
+        weight = False
+    for i in b_list:
+        with open(f'.\\material\\map_{materialf[i]}_b.txt','r') as f:
+            b = f.read().split('\n')
+            m_list.append(b)
+        with open(f'.\\material\\map_{materialf[i]}_c.txt','r') as f:
+            c = f.read().split('\n')
+            for j in c:
+                c_list.append(list(map(int,j.split(','))))
+    result = match(path,c_list)
+    r = []
+    mt_list = []
+    for i in m_list:
+        for j in i:
+            mt_list.append(j)
+    for x, y, l in result:
+        r.append(convert_c(x,y,l,mt_list))
+    j = 0
+    for i in range(0,len(r),9000):
+        with open(f'.\\functions\\fnew{j}.mcfunction', 'w') as f:
+            f.write('\n'.join(r[i:i+9000]))
+        j += 1
+    print(f'生成完毕  共{j}个文件')
+    time.sleep(2)
 
 def main():
     print('1 地图画模式')
     print('2 沙画模式')
+    print('3 花模式')
     a = input()
     if a == '1':
         main_a()
     elif a == '2':
         main_b()
+    elif a == '3':
+        main_c()
 
 if __name__ == '__main__':
     main()
