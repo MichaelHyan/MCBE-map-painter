@@ -48,8 +48,8 @@ def convert_a(x,y,l,block):
 def convert_b(x,y,z,block):
     return f'setblock ~{x} ~{z-1} ~{y} {block}'
 
-def convert_c(x,y,l,block):
-    return f'setblock ~{x} ~ ~{y} {block[l]}'
+def convert_c(x,y,h,l,block):
+    return f'fill ~{x} ~{-h} ~{y} ~{x} ~{h} ~{y} {block[l]} keep'
 
 def tower0(x,y,l):
     t1 =[]
@@ -311,13 +311,15 @@ def main_c():
             for j in c:
                 c_list.append(list(map(int,j.split(','))))
     result = match(path,c_list)
+    print('输入误差限(以人物坐在面为基准,平面为0)')
+    h = int(input())
     r = []
     mt_list = []
     for i in m_list:
         for j in i:
             mt_list.append(j)
     for x, y, l in result:
-        r.append(convert_c(x,y,l,mt_list))
+        r.append(convert_c(x,y,h,l,mt_list))
     j = 0
     for i in range(0,len(r),9000):
         with open(f'.\\functions\\fnew{j}.mcfunction', 'w') as f:
