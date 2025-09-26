@@ -120,9 +120,14 @@ def main_a():
     print('选取材料类型，序号使用空格分开')
     for i in range(len(material)):
         print(f'{i} {name[i]} {material[i]}')
-    b_list = list(map(int,input().split()))
+    it = input()
+    if it == '':
+        b_list = list(map(int,'1 3 4 5 6 7 9'.split()))
+    else:
+        b_list = list(map(int,it.split()))
     print('是否使用视觉增强算法，y/n')
-    if input() == 'y':
+    it = input()
+    if it == 'y' or it == '':
         weight = True
     else:
         weight = False
@@ -149,7 +154,8 @@ def main_a():
         j += 1
     print(f'生成完毕  共{j}个文件')
     print('是否生成预览图，y/n')
-    if input() == 'y':
+    it = input()
+    if it == 'y':
         pix = []
         for x,y,l in result:
             pix.append((x,y,(c_list[l][0],c_list[l][1],c_list[l][2])))
@@ -167,7 +173,8 @@ def main_b():
     print('将图片拖至此处')
     path = input()
     print('是否使用视觉增强算法，y/n')
-    if input() == 'y':
+    it = input()
+    if it == 'y' or it == '':
         weight = True
     else:
         weight = False
@@ -271,7 +278,8 @@ def main_b():
         j += 1
     print(f'生成完毕  共{j}个文件')
     print('是否生成预览图，y/n')
-    if input() == 'y':
+    it = input()
+    if it == 'y':
         pix = []
         for x,y,l in result:
             pix.append((x,y,(c_list[l][0],c_list[l][1],c_list[l][2])))
@@ -296,9 +304,14 @@ def main_c():
     print('选取材料类型，序号使用空格分开')
     for i in range(len(materialf)):
         print(f'{i} {namef[i]} {materialf[i]}')
-    b_list = list(map(int,input().split()))
+    it = input()
+    if it == '':
+        b_list = list(map(int,'0 1'.split()))
+    else:
+        b_list = list(map(int,it.split()))
     print('是否使用视觉增强算法，y/n')
-    if input() == 'y':
+    it = input()
+    if it == 'y' or it == '':
         weight = True
     else:
         weight = False
